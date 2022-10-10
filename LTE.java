@@ -17,19 +17,24 @@ class LTE{
         //checks if there is 1 file
         } else if(args.length == 1){    
             File file = new File(args[0]);
-            Scanner fileS = new Scanner(file);
 
-            //add each file line to dllist
-            while (fileS.hasNextLine()){
-                buffer.lines.insertLast(fileS.nextLine());
+            //checks if valid file
+            if(file.isFile()){
+                Scanner fileS = new Scanner(file);
+
+                //add each file line to dllist
+                 while (fileS.hasNextLine()){
+                    buffer.lines.insertLast(fileS.nextLine());
+                }
+                fileS.close();
+            } else {
+                System.out.println("Not a valid file.");
             }
-            fileS.close();
         }
 
         Scanner in = new Scanner(System.in);
 
         CommandLine cl = new CommandLine();
-        //cl.read(in);
         boolean done = false;
 
         //reads and processes commands until the user quits
@@ -132,7 +137,6 @@ class LTE{
         }
 
         in.close();
-        //how to make it run?
     }
 
     //checks if given input is a number
@@ -219,7 +223,7 @@ class LTE{
         } else {
             System.out.println("Invalid command");
     }
-    //might need to edit
+    //test
 
     }
 
@@ -334,7 +338,6 @@ class LTE{
             } else if (b.lines.atFirst()){
                 System.out.println("==>> ALREADY AT TOP OF BUFFER <<==");
             } else {
-                //b.lines.seek(b.lines.getIndex() -1);
                 b.lines.previous();
             }
         } else {
@@ -350,7 +353,6 @@ class LTE{
             } else if (b.lines.atLast()){
                 System.out.println("==>> ALREADY AT BOTTOM OF BUFFER <<==");
             } else {
-                //b.lines.seek(b.lines.getIndex() +1);
                 b.lines.next();
             }
         } else {
@@ -678,7 +680,6 @@ class LTE{
         }
         
     }
-    //maybe done? need new lines?
 
     public static void pasteB(CommandLine c, Buffer b, Buffer cb){
 
@@ -699,12 +700,12 @@ class LTE{
             System.out.println("Invalid command");
         }
     }
-    //maybe
 
     public static void insertA(CommandLine c, Buffer b, Buffer cb) throws IOException{
         if(c.count == 0){
             Scanner s = new Scanner(System.in);
             String st;
+            int currentLine = b.lines.getIndex();
             boolean done = false;
             cb.lines.clear();
 
@@ -720,6 +721,7 @@ class LTE{
             //s.close();
             cb.setDirty(true);
             pasteA(c, b, cb);
+            b.lines.seek(currentLine);
 
         } else {
             System.out.println("Invalid command");
@@ -731,6 +733,7 @@ class LTE{
         if(c.count == 0){
             Scanner s = new Scanner(System.in);
             String st;
+            int currentLine = b.lines.getIndex();
             cb.lines.clear();
             boolean done = false;
 
@@ -746,6 +749,7 @@ class LTE{
             //s.close();
             cb.setDirty(true);
             pasteB(c, b, cb);
+            b.lines.seek(currentLine);
 
         } else {
             System.out.println("Invalid command");
@@ -759,7 +763,6 @@ class LTE{
             String st;
             cb.lines.clear();
             boolean done = false; 
-            int currentLine = b.lines.getIndex() + 1;
 
             while(!done){
                 st = s.nextLine();
@@ -772,7 +775,6 @@ class LTE{
             //s.close();
             cb.setDirty(true);
             pasteA(c, b, cb);
-            b.lines.seek(currentLine);
         } else {
             System.out.println("Invalid command");
         }
